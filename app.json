@@ -33,6 +33,12 @@
           "resizeMode": "contain",
           "backgroundColor": "#EAF7E4"
         }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Pipliro uses Face ID so only a grown-up can open the parent area."
+        }
       ]
     ],
     "scheme": "pipliro",

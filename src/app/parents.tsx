@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
-import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/Button';
 import { LanguagePicker } from '@/components/LanguagePicker';
+import { ParentGate } from '@/components/ParentGate';
 import { MISSIONS } from '@/data/missions';
 import { PATHS } from '@/data/paths';
 import { WORDS } from '@/data/words';
@@ -12,43 +13,10 @@ import { Language, useLanguage } from '@/i18n';
 import { useProgress } from '@/state/progress';
 import { colors, font, radius } from '@/theme';
 
-/** A grown-up check: multiplication a 5–10 year old is unlikely to solve by tapping around. */
-function useGate() {
-  const [gate] = useState(() => {
-    const a = 6 + Math.floor(Math.random() * 4);
-    const b = 6 + Math.floor(Math.random() * 4);
-    return { question: `${a} × ${b}`, answer: String(a * b) };
-  });
-  return gate;
-}
-
 export default function Parents() {
-  const gate = useGate();
-  const { t } = useLanguage();
-  const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
-
-  if (!open) {
-    return (
-      <SafeAreaView style={styles.gate}>
-        <Text style={font.title}>{t.gateTitle}</Text>
-        <Text style={font.small}>{t.gateHelp}</Text>
-        <Text style={styles.question}>{gate.question} = ?</Text>
-        <TextInput
-          value={input}
-          onChangeText={setInput}
-          keyboardType="number-pad"
-          style={styles.input}
-          maxLength={3}
-          accessibilityLabel={t.answerA11y}
-          onSubmitEditing={() => input === gate.answer && setOpen(true)}
-        />
-        <Button label={t.continue} disabled={input !== gate.answer} onPress={() => setOpen(true)} style={{ alignSelf: 'stretch' }} />
-        <Button label={t.back} variant="secondary" onPress={() => router.back()} style={{ alignSelf: 'stretch' }} />
-      </SafeAreaView>
-    );
-  }
-  return <Dashboard />;
+  const unlock = useCallback(() => setOpen(true), []);
+  return open ? <Dashboard /> : <ParentGate onUnlock={unlock} />;
 }
 
 function Dashboard() {
@@ -173,18 +141,6 @@ function WordList({ ids, empty, gloss }: { ids: string[]; empty: string; gloss: 
 }
 
 const styles = StyleSheet.create({
-  gate: { flex: 1, padding: 24, justifyContent: 'center', alignItems: 'center', gap: 16, backgroundColor: '#F4F8FB' },
-  question: { fontSize: 44, fontWeight: '900', color: colors.ink, marginVertical: 8 },
-  input: {
-    alignSelf: 'stretch',
-    fontSize: 32,
-    textAlign: 'center',
-    padding: 14,
-    borderRadius: radius.md,
-    borderWidth: 2,
-    borderColor: colors.line,
-    backgroundColor: colors.card,
-  },
   page: { padding: 20, gap: 18, paddingBottom: 48 },
   stats: { flexDirection: 'row', gap: 10 },
   stat: { flex: 1, padding: 14, borderRadius: radius.md, backgroundColor: colors.card, borderWidth: 2, borderColor: colors.line, alignItems: 'center' },

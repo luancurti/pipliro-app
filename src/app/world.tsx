@@ -16,7 +16,7 @@ export default function World() {
   const openMission = (id: string) => router.push({ pathname: '/mission/[id]', params: { id } });
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+    <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <Text style={{ fontSize: 40 }}>{progress.profile?.avatar}</Text>
         <View style={styles.seeds} accessibilityLabel={t.seedsA11y(progress.seeds)}>
