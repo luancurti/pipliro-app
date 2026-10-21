@@ -39,6 +39,14 @@
         {
           "faceIDPermission": "Pipliro uses Face ID so only a grown-up can open the parent area."
         }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": false
+        }
       ]
     ],
     "scheme": "pipliro",
